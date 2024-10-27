@@ -4,24 +4,24 @@
 
 
 console.clear();
-// console.log(window);
-// console.log(window.document);
-// console.log(window.location);
+console.log(window);
+console.log(window.document);
+console.log(window.location);
 
-// //href
-// console.log(location.href);
+//href
+console.log(location.href);
 
-// // protocol
-// console.log(location.protocol);
+// protocol
+console.log(location.protocol);
 
-// // hostname
-// console.log(location.hostname);
+// hostname
+console.log(location.hostname);
 
-// // port
-// console.log(location.port);
+// port
+console.log(location.port);
 
-// // pathname
-// console.log(location.pathname);
+// pathname
+console.log(location.pathname);
 
 var locationDiv = document.querySelector(".location-div");
 console.log(locationDiv);
