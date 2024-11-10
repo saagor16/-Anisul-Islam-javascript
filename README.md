@@ -44,7 +44,3 @@ A huge shoutout to **Anisul Islam** for providing such a comprehensive, beginner
 ## 💻 What's Next?
 Now that I’ve completed this phase, I’m excited to keep growing and apply these skills to real-world projects. Stay tuned for more updates! 💻✨
 
----
-
-### Hashtags:
-#JavaScript #WebDevelopment #Programming #LearningJourney #HTML #CSS #Coding #FrontendDevelopment #AnisulIslam #YouTubeLearning #TechJourney
