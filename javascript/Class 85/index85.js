@@ -1,158 +1,117 @@
-//calling api from javascript | XMLHttpRequest
+//calling api from javascript | axios api
+
+// 1. XMLHttpRequest (Old Way)
+console.log('Using XMLHttpRequest:');
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts', true);
+xhr.onload = () => {
+  if (xhr.status === 200) {
+    console.log('XMLHttpRequest Response:', JSON.parse(xhr.responseText));
+  } else {
+    console.error('Request failed');
+  }
+};
+xhr.onerror = () => console.error('Network error');
+xhr.send();
+
+
+// 2. Fetch API (Using Promises)
+console.log('\nUsing Fetch API (Promises):');
+fetch('https://jsonplaceholder.typicode.com/posts')
+  .then(response => response.json())
+  .then(data => console.log('Fetch API Response:', data))
+  .catch(error => console.error('Error:', error));
+
+
+// 3. Fetch API with Async/Await
+console.log('\nUsing Fetch API (Async/Await):');
+const makeRequestWithAsyncAwait = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Async/Await Fetch API Response:', data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+makeRequestWithAsyncAwait('https://jsonplaceholder.typicode.com/posts');
+
+
+// 4. Axios (Third-party Library)
+console.log('\nUsing Axios:');
+
+// You would need to install Axios using npm first: npm install axios
+// Here's how you would use it:
+
+// If you are using it in a Node.js environment, require axios like this:
+// const axios = require('axios'); 
+
+// Or if you are using it directly in the browser, you can add the axios CDN:
+// <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 console.clear();
 
-// Event - onload(), onerror()
-// Properties - response, responseText, responseType, responseURL, status, statusText
-// Functions - open(), send(), setRequestHeader()
-
-// XMLHttpRequest ব্যবহার করে HTTP রিকোয়েস্ট করার জন্য ফাংশন
-const makeRequest = (method, url, data) => {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();  // নতুন XMLHttpRequest অবজেক্ট তৈরি
-        xhr.open(method, url);  // মেথড এবং URL দিয়ে রিকোয়েস্ট ওপেন করা
-
-        // রিকোয়েস্ট হেডার সেট করা, JSON ডেটার জন্য Content-Type নির্ধারণ
-        xhr.setRequestHeader('Content-Type', 'application/json');
-
-        // রেসপন্স সফল হলে onload ইভেন্ট ট্রিগার হয়
-        xhr.onload = () => {
-            if (xhr.status >= 200 && xhr.status < 300) { // সফল রেসপন্স স্ট্যাটাস চেক করা
-                resolve(JSON.parse(xhr.response));  // JSON ফরম্যাটে ডেটা রিটার্ন
-            } else {
-                reject(new Error(`Request failed with status ${xhr.status}`));
-            }
-        };
-
-        // রিকোয়েস্ট ব্যর্থ হলে onerror ইভেন্ট ট্রিগার হয়
-        xhr.onerror = () => {
-            reject(new Error('Network error occurred'));
-        };
-
-        // ডেটা পাঠানো, যদি ডেটা না থাকে তবে null
-        xhr.send(data ? JSON.stringify(data) : null);
-    });
+const makeRequest = async (config) => {
+  return await axios(config);
 };
 
-// GET Request: ডেটা রিটার্ন করা
-const getData = () => {
-    makeRequest('GET', 'https://jsonplaceholder.typicode.com/posts')
-        .then((res) => console.log(res))
-        .catch((err) => console.error(err));
-};
-
-getData();
-
-// POST Request: নতুন ডেটা যোগ করা
-const sendData = () => {
-    makeRequest('POST', 'https://jsonplaceholder.typicode.com/posts', {
-        title: 'foo',
-        body: 'bar',
-        userId: 1,
-    })
-    .then((res) => console.log(res))
-    .catch((err) => console.error(err));
-};
-
-// PUT Request: সম্পূর্ণ ডেটা আপডেট করা
-const updateData = () => {
-    makeRequest('PUT', 'https://jsonplaceholder.typicode.com/posts/1', {
-        id: 1,
-        title: 'fooMA',
-        body: 'barMA',
-        userId: 1,
-    })
-    .then((res) => console.log(res))
-    .catch((err) => console.error(err));
-};
-
-// PATCH Request: আংশিক ডেটা আপডেট করা
-const updateSingleData = () => {
-    makeRequest('PATCH', 'https://jsonplaceholder.typicode.com/posts/1', {
-        title: 'This is changed',
-    })
-    .then((res) => console.log(res))
-    .catch((err) => console.error(err));
-};
-
-// DELETE Request: ডেটা ডিলিট করা
 const deleteData = () => {
-    makeRequest('DELETE', 'https://jsonplaceholder.typicode.com/posts/1')
-    .then((res) => console.log("Deleted successfully"))
-    .catch((err) => console.error(err));
+  makeRequest({
+    url: "https://jsonplaceholder.typicode.com/posts/1",
+    method: "delete",
+  })
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
 };
+deleteData();
 
-// deleteData();  // Uncomment করলে ডেটা ডিলিট করবে
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Basic Example of XMLHttpRequest
-// 1. XMLHttpRequest অবজেক্ট তৈরি
-const xhr = new XMLHttpRequest();
-
-// 2. রিকোয়েস্ট ওপেন করা (GET মেথড এবং URL ব্যবহার করে)
-xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1", true); // true মানে অ্যাসিঙ্ক্রোনাস
-
-// 3. রেসপন্স রিসিভ করার জন্য ইভেন্ট হ্যান্ডলার তৈরি
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-        // রেসপন্স সফল হলে রেসপন্স ডেটা প্রসেস করা
-        console.log(JSON.parse(xhr.responseText)); // JSON ফরম্যাটে রেসপন্স প্রিন্ট
-    }
+// Example for PUT method
+const updateData = () => {
+  makeRequest({
+    url: "https://jsonplaceholder.typicode.com/posts/1",
+    method: "put",
+    data: JSON.stringify({
+      id: 1,
+      title: "fooma",
+      body: "barma",
+      userId: 1,
+    }),
+  })
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
 };
+updateData();
 
-// 4. রিকোয়েস্ট পাঠানো
-xhr.send();
-
-//Error Handling and POST Request
-const xhr = new XMLHttpRequest();
-
-// POST রিকোয়েস্ট ওপেন করা
-xhr.open("POST", "https://jsonplaceholder.typicode.com/posts", true);
-xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-// রেসপন্স রিসিভ করা এবং এরর হ্যান্ডলিং করা
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            console.log("Response received:", JSON.parse(xhr.responseText));
-        } else {
-            console.error("Error:", xhr.status, xhr.statusText);
-        }
-    }
+// Example for POST method
+const createData = () => {
+  makeRequest({
+    url: "https://jsonplaceholder.typicode.com/posts",
+    method: "post",
+    data: JSON.stringify({
+      title: "foo",
+      body: "bar",
+      userId: 1,
+    }),
+  })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
 };
+createData();
 
-// ডেটা পাঠানো
-const data = JSON.stringify({
-    title: "Hello World",
-    body: "This is a sample post.",
-    userId: 1
-});
-xhr.send(data);
-
+// Example for GET method
+const getData = () => {
+  makeRequest({
+    url: "https://jsonplaceholder.typicode.com/posts",
+    method: "get",
+  })
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
+};
+getData();
 
 
 
