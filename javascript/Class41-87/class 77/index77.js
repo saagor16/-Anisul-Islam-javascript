@@ -54,6 +54,8 @@ console.log(Car.compare(car1, car2)); // Output: -5 (indicating car1 is older)
 
 
 
+
+
 //Class Inheritance
 class Motorcycle extends Vehicle {
     constructor(brand, type) {
