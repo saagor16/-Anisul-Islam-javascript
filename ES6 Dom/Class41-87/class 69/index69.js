@@ -4,7 +4,6 @@ for (const key in object) {
   // Code to execute with each key
 }
 
-
 const person = { name: "Alice", age: 25, city: "Dhaka" };
 
 for (const key in person) {
